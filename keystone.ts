@@ -24,6 +24,14 @@ export default withAuth(
     },
     lists,
     session,
+    server: {
+      cors: undefined
+        // cors: { origin: ['*','http://localhost','http://127.0.0.1'] },
+    },
+    graphql: {
+      cors: undefined
+      // cors: { origin: ['*','http://localhost','http://127.0.0.1'] },
+    },
     storage: {
       my_images: {
         kind: 's3',
@@ -43,6 +51,6 @@ export default withAuth(
         secretAccessKey,
         signed: { expiry: 5000 },
       },
-    },
+    }
   })
 );

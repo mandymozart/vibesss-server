@@ -21,6 +21,19 @@ model User {
   createdAt DateTime? @default(now())
 }
 
+model Session {
+  id           String   @id @default(cuid())
+  title        String   @default("")
+  slug         String   @unique @default("")
+  session_json Json?    @map("session_json")
+  presets      Preset[] @relation("Preset_sessions")
+  author       User?    @relation("Session_author", fields: [authorId], references: [id])
+  authorId     String?  @map("author")
+  tags         Tag[]    @relation("Session_tags")
+
+  @@index([authorId])
+}
+
 model Preset {
   id          String    @id @default(cuid())
   title       String    @default("")
@@ -46,13 +59,6 @@ model Content {
   @@index([mediaId])
 }
 
-model Group {
-  id      String   @id @default(cuid())
-  name    String   @default("")
-  channel Int      @default(0)
-  presets Preset[] @relation("Group_presets")
-}
-
 model Media {
   id              String        @id @default(cuid())
   content         Content[]     @relation("Content_media")
@@ -68,17 +74,11 @@ model Media {
   type            MediaTypeType @unique @default(onomatopoeia) @map("media_type")
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  title        String   @default("")
-  slug         String   @unique @default("")
-  session_json Json?    @map("session_json")
-  presets      Preset[] @relation("Preset_sessions")
-  author       User?    @relation("Session_author", fields: [authorId], references: [id])
-  authorId     String?  @map("author")
-  tags         Tag[]    @relation("Session_tags")
-
-  @@index([authorId])
+model Group {
+  id      String   @id @default(cuid())
+  name    String   @default("")
+  channel Int      @default(0)
+  presets Preset[] @relation("Group_presets")
 }
 
 model Tag {

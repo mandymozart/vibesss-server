@@ -157,6 +157,93 @@ input PresetRelateToManyForCreateInput {
   connect: [PresetWhereUniqueInput!]
 }
 
+type Session {
+  id: ID!
+  title: String
+  slug: String
+  session_json: JSON
+  presets(where: PresetWhereInput! = {}, orderBy: [PresetOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PresetWhereUniqueInput): [Preset!]
+  presetsCount(where: PresetWhereInput! = {}): Int
+  author: User
+  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
+  tagsCount(where: TagWhereInput! = {}): Int
+}
+
+input SessionWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input SessionWhereInput {
+  AND: [SessionWhereInput!]
+  OR: [SessionWhereInput!]
+  NOT: [SessionWhereInput!]
+  id: IDFilter
+  title: StringFilter
+  slug: StringFilter
+  presets: PresetManyRelationFilter
+  author: UserWhereInput
+  tags: TagManyRelationFilter
+}
+
+input TagManyRelationFilter {
+  every: TagWhereInput
+  some: TagWhereInput
+  none: TagWhereInput
+}
+
+input SessionOrderByInput {
+  id: OrderDirection
+  title: OrderDirection
+  slug: OrderDirection
+}
+
+input SessionUpdateInput {
+  title: String
+  slug: String
+  session_json: JSON
+  presets: PresetRelateToManyForUpdateInput
+  author: UserRelateToOneForUpdateInput
+  tags: TagRelateToManyForUpdateInput
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input TagRelateToManyForUpdateInput {
+  disconnect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
+  create: [TagCreateInput!]
+  connect: [TagWhereUniqueInput!]
+}
+
+input SessionUpdateArgs {
+  where: SessionWhereUniqueInput!
+  data: SessionUpdateInput!
+}
+
+input SessionCreateInput {
+  title: String
+  slug: String
+  session_json: JSON
+  presets: PresetRelateToManyForCreateInput
+  author: UserRelateToOneForCreateInput
+  tags: TagRelateToManyForCreateInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input TagRelateToManyForCreateInput {
+  create: [TagCreateInput!]
+  connect: [TagWhereUniqueInput!]
+}
+
 type Preset {
   id: ID!
   title: String
@@ -204,12 +291,6 @@ input ContentManyRelationFilter {
   none: ContentWhereInput
 }
 
-input TagManyRelationFilter {
-  every: TagWhereInput
-  some: TagWhereInput
-  none: TagWhereInput
-}
-
 input PresetOrderByInput {
   id: OrderDirection
   title: OrderDirection
@@ -241,19 +322,6 @@ input ContentRelateToManyForUpdateInput {
   connect: [ContentWhereUniqueInput!]
 }
 
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
-input TagRelateToManyForUpdateInput {
-  disconnect: [TagWhereUniqueInput!]
-  set: [TagWhereUniqueInput!]
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
 input PresetUpdateArgs {
   where: PresetWhereUniqueInput!
   data: PresetUpdateInput!
@@ -278,16 +346,6 @@ input GroupRelateToManyForCreateInput {
 input ContentRelateToManyForCreateInput {
   create: [ContentCreateInput!]
   connect: [ContentWhereUniqueInput!]
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-}
-
-input TagRelateToManyForCreateInput {
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
 }
 
 type Content {
@@ -354,51 +412,6 @@ input ContentCreateInput {
 input MediaRelateToOneForCreateInput {
   create: MediaCreateInput
   connect: MediaWhereUniqueInput
-}
-
-type Group {
-  id: ID!
-  name: String
-  channel: Int
-  presets(where: PresetWhereInput! = {}, orderBy: [PresetOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PresetWhereUniqueInput): [Preset!]
-  presetsCount(where: PresetWhereInput! = {}): Int
-}
-
-input GroupWhereUniqueInput {
-  id: ID
-}
-
-input GroupWhereInput {
-  AND: [GroupWhereInput!]
-  OR: [GroupWhereInput!]
-  NOT: [GroupWhereInput!]
-  id: IDFilter
-  name: StringFilter
-  channel: IntFilter
-  presets: PresetManyRelationFilter
-}
-
-input GroupOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-  channel: OrderDirection
-}
-
-input GroupUpdateInput {
-  name: String
-  channel: Int
-  presets: PresetRelateToManyForUpdateInput
-}
-
-input GroupUpdateArgs {
-  where: GroupWhereUniqueInput!
-  data: GroupUpdateInput!
-}
-
-input GroupCreateInput {
-  name: String
-  channel: Int
-  presets: PresetRelateToManyForCreateInput
 }
 
 type Media {
@@ -508,62 +521,49 @@ input MediaCreateInput {
   type: MediaTypeType
 }
 
-type Session {
+type Group {
   id: ID!
-  title: String
-  slug: String
-  session_json: JSON
+  name: String
+  channel: Int
   presets(where: PresetWhereInput! = {}, orderBy: [PresetOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PresetWhereUniqueInput): [Preset!]
   presetsCount(where: PresetWhereInput! = {}): Int
-  author: User
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
-  tagsCount(where: TagWhereInput! = {}): Int
 }
 
-input SessionWhereUniqueInput {
+input GroupWhereUniqueInput {
   id: ID
-  slug: String
 }
 
-input SessionWhereInput {
-  AND: [SessionWhereInput!]
-  OR: [SessionWhereInput!]
-  NOT: [SessionWhereInput!]
+input GroupWhereInput {
+  AND: [GroupWhereInput!]
+  OR: [GroupWhereInput!]
+  NOT: [GroupWhereInput!]
   id: IDFilter
-  title: StringFilter
-  slug: StringFilter
+  name: StringFilter
+  channel: IntFilter
   presets: PresetManyRelationFilter
-  author: UserWhereInput
-  tags: TagManyRelationFilter
 }
 
-input SessionOrderByInput {
+input GroupOrderByInput {
   id: OrderDirection
-  title: OrderDirection
-  slug: OrderDirection
+  name: OrderDirection
+  channel: OrderDirection
 }
 
-input SessionUpdateInput {
-  title: String
-  slug: String
-  session_json: JSON
+input GroupUpdateInput {
+  name: String
+  channel: Int
   presets: PresetRelateToManyForUpdateInput
-  author: UserRelateToOneForUpdateInput
-  tags: TagRelateToManyForUpdateInput
 }
 
-input SessionUpdateArgs {
-  where: SessionWhereUniqueInput!
-  data: SessionUpdateInput!
+input GroupUpdateArgs {
+  where: GroupWhereUniqueInput!
+  data: GroupUpdateInput!
 }
 
-input SessionCreateInput {
-  title: String
-  slug: String
-  session_json: JSON
+input GroupCreateInput {
+  name: String
+  channel: Int
   presets: PresetRelateToManyForCreateInput
-  author: UserRelateToOneForCreateInput
-  tags: TagRelateToManyForCreateInput
 }
 
 type Tag {
@@ -623,6 +623,12 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
+  createSession(data: SessionCreateInput!): Session
+  createSessions(data: [SessionCreateInput!]!): [Session]
+  updateSession(where: SessionWhereUniqueInput!, data: SessionUpdateInput!): Session
+  updateSessions(data: [SessionUpdateArgs!]!): [Session]
+  deleteSession(where: SessionWhereUniqueInput!): Session
+  deleteSessions(where: [SessionWhereUniqueInput!]!): [Session]
   createPreset(data: PresetCreateInput!): Preset
   createPresets(data: [PresetCreateInput!]!): [Preset]
   updatePreset(where: PresetWhereUniqueInput!, data: PresetUpdateInput!): Preset
@@ -635,24 +641,18 @@ type Mutation {
   updateContents(data: [ContentUpdateArgs!]!): [Content]
   deleteContent(where: ContentWhereUniqueInput!): Content
   deleteContents(where: [ContentWhereUniqueInput!]!): [Content]
-  createGroup(data: GroupCreateInput!): Group
-  createGroups(data: [GroupCreateInput!]!): [Group]
-  updateGroup(where: GroupWhereUniqueInput!, data: GroupUpdateInput!): Group
-  updateGroups(data: [GroupUpdateArgs!]!): [Group]
-  deleteGroup(where: GroupWhereUniqueInput!): Group
-  deleteGroups(where: [GroupWhereUniqueInput!]!): [Group]
   createMedia(data: MediaCreateInput!): Media
   createMedias(data: [MediaCreateInput!]!): [Media]
   updateMedia(where: MediaWhereUniqueInput!, data: MediaUpdateInput!): Media
   updateMedias(data: [MediaUpdateArgs!]!): [Media]
   deleteMedia(where: MediaWhereUniqueInput!): Media
   deleteMedias(where: [MediaWhereUniqueInput!]!): [Media]
-  createSession(data: SessionCreateInput!): Session
-  createSessions(data: [SessionCreateInput!]!): [Session]
-  updateSession(where: SessionWhereUniqueInput!, data: SessionUpdateInput!): Session
-  updateSessions(data: [SessionUpdateArgs!]!): [Session]
-  deleteSession(where: SessionWhereUniqueInput!): Session
-  deleteSessions(where: [SessionWhereUniqueInput!]!): [Session]
+  createGroup(data: GroupCreateInput!): Group
+  createGroups(data: [GroupCreateInput!]!): [Group]
+  updateGroup(where: GroupWhereUniqueInput!, data: GroupUpdateInput!): Group
+  updateGroups(data: [GroupUpdateArgs!]!): [Group]
+  deleteGroup(where: GroupWhereUniqueInput!): Group
+  deleteGroups(where: [GroupWhereUniqueInput!]!): [Group]
   createTag(data: TagCreateInput!): Tag
   createTags(data: [TagCreateInput!]!): [Tag]
   updateTag(where: TagWhereUniqueInput!, data: TagUpdateInput!): Tag
@@ -685,21 +685,21 @@ type Query {
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
+  sessions(where: SessionWhereInput! = {}, orderBy: [SessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SessionWhereUniqueInput): [Session!]
+  session(where: SessionWhereUniqueInput!): Session
+  sessionsCount(where: SessionWhereInput! = {}): Int
   presets(where: PresetWhereInput! = {}, orderBy: [PresetOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PresetWhereUniqueInput): [Preset!]
   preset(where: PresetWhereUniqueInput!): Preset
   presetsCount(where: PresetWhereInput! = {}): Int
   contents(where: ContentWhereInput! = {}, orderBy: [ContentOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ContentWhereUniqueInput): [Content!]
   content(where: ContentWhereUniqueInput!): Content
   contentsCount(where: ContentWhereInput! = {}): Int
-  groups(where: GroupWhereInput! = {}, orderBy: [GroupOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: GroupWhereUniqueInput): [Group!]
-  group(where: GroupWhereUniqueInput!): Group
-  groupsCount(where: GroupWhereInput! = {}): Int
   medias(where: MediaWhereInput! = {}, orderBy: [MediaOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MediaWhereUniqueInput): [Media!]
   media(where: MediaWhereUniqueInput!): Media
   mediasCount(where: MediaWhereInput! = {}): Int
-  sessions(where: SessionWhereInput! = {}, orderBy: [SessionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SessionWhereUniqueInput): [Session!]
-  session(where: SessionWhereUniqueInput!): Session
-  sessionsCount(where: SessionWhereInput! = {}): Int
+  groups(where: GroupWhereInput! = {}, orderBy: [GroupOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: GroupWhereUniqueInput): [Group!]
+  group(where: GroupWhereUniqueInput!): Group
+  groupsCount(where: GroupWhereInput! = {}): Int
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tag(where: TagWhereUniqueInput!): Tag
   tagsCount(where: TagWhereInput! = {}): Int
